@@ -30,7 +30,7 @@ namespace TokenManagementSystem.Controllers
         }
 
         [HttpPost]
-       public async Task<IActionResult> Post(Customer customer)
+        public async Task<IActionResult> Post(Customer customer)
         {
             if(!ModelState.IsValid)
             {
@@ -39,14 +39,13 @@ namespace TokenManagementSystem.Controllers
 
             try
             {
-                await tokenDbService.AddCustomerDetails(customer);
+                var token = await tokenDbService.AddCustomerDetails(customer);
+                return StatusCode(StatusCodes.Status201Created, token);
             }
             catch (Exception e)
             {
                 return Problem("Ooops... Not able to add the customer. " + e.Message);
-            }
-            
-            return StatusCode(StatusCodes.Status201Created);
+            }           
         }
 
         [HttpPut("{Id}")]
@@ -64,7 +63,6 @@ namespace TokenManagementSystem.Controllers
 
             try
             {
-                // customerRepository.UpdateCustomer(customer);
                 await tokenDbService.UpdateCustomerAsync(id, customer);
             }
             catch (Exception e)

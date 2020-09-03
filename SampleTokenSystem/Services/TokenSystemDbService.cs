@@ -20,7 +20,7 @@ namespace TokenManagementSystem.Services
         {
             this.container = dbClient.GetContainer(databaseName, contianerName);
         }
-        public async Task AddCustomerDetails(Customer customer)
+        public async Task<Token> AddCustomerDetails(Customer customer)
         {
             var customerId = Guid.NewGuid().ToString();
             var customerCount = this.container.GetItemLinqQueryable<Customer>(true).Count();
@@ -28,6 +28,7 @@ namespace TokenManagementSystem.Services
             customer.Token.TokenNumber = ++customerCount;
             customer.Token.Status = Status.InQueue;
             await this.container.CreateItemAsync(customer, new PartitionKey(customer.Token.ServiceType));
+            return customer.Token;
         }
 
         public async Task DeleteCustomerAsync(string id)
@@ -45,10 +46,8 @@ namespace TokenManagementSystem.Services
             }
             catch (CosmosException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-
                 return null;
-            }
-            
+            }      
         }
 
         public IEnumerable<CustomerDashboard> GetCustomersTokenDetails()
@@ -91,9 +90,9 @@ namespace TokenManagementSystem.Services
             return this.container.GetItemLinqQueryable<Customer>(true).AsEnumerable().Select(x => x.Token);
         }
         
-        public async Task UpdateCustomerAsync(string id, Customer customers)
+        public async Task UpdateCustomerAsync(string id, Customer customer)
         {
-            await this.container.UpsertItemAsync<Customer>(customers, new PartitionKey(id));
+            await this.container.UpsertItemAsync<Customer>(customer, new PartitionKey(customer.Token.ServiceType));
         }
 
         public async Task<bool> UpdateTokenStatusAsync(string id, string status)

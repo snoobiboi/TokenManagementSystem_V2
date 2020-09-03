@@ -11,7 +11,7 @@ namespace TokenManagementSystem.Services
         IEnumerable<CustomerDashboard> GetCustomersTokenDetails();
         IEnumerable<Token> GetTokenDetailsForBank();
         Customer GetCustomerById(string id);
-        Task AddCustomerDetails(Customer customer);
+        Task<Token> AddCustomerDetails(Customer customer);
         Task<bool> UpdateTokenStatusAsync(string id, string status);
         Task UpdateCustomerAsync(string id, Customer customer);
         Task DeleteCustomerAsync(string id);

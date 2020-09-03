@@ -28,10 +28,6 @@ namespace TokenManagementSystem
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // INFO: Entity Framework DB context
-            // services.AddDbContext<CustomersDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("myConnectionString")));
-            // INFO: Repository pattern scope
-            // services.AddScoped<ICustomer, CustomerRepository>();
             services.AddSingleton<ITokenSystemDbService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
         }
 
@@ -53,9 +49,6 @@ namespace TokenManagementSystem
             {
                 endpoints.MapControllers();
             });
-
-            //INFO: Code-First approach
-            // customersDbContext.Database.EnsureCreated();
         }
 
         
