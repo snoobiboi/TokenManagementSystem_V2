@@ -48,7 +48,7 @@ namespace TokenManagementSystem.Controllers
                     var response = await tokenDbService.UpdateTokenStatusAsync(id, status);
                     if (!response)
                     {
-                        return NotFound("Error occured while updating.");
+                        return NotFound("Invalid customer Id.");
                     }
                     return Ok("Customer's token status is updated successfuly");
                 }
@@ -65,6 +65,7 @@ namespace TokenManagementSystem.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            throw new NotImplementedException();
         }
     }
 }

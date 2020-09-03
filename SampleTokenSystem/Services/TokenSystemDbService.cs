@@ -33,7 +33,9 @@ namespace TokenManagementSystem.Services
 
         public async Task DeleteCustomerAsync(string id)
         {
-            await this.container.DeleteItemAsync<Customer>(id, new PartitionKey(id));
+            var customerToBeDeleted = this.container.GetItemLinqQueryable<Customer>(true)
+                   .Where(x => x.Id.Equals(id)).AsEnumerable().FirstOrDefault();
+            await this.container.DeleteItemAsync<Customer>(id, new PartitionKey(customerToBeDeleted.Token.ServiceType));
         }
 
         public Customer GetCustomerById(string id)
