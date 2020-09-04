@@ -18,6 +18,7 @@ namespace TokenManagementSystem.Controllers
 
         public CustomersController(ITokenSystemDbService dbService) => tokenDbService = dbService;
 
+        [HttpGet]
         public IEnumerable<CustomerDashboard> Get()
         {
             return tokenDbService.GetCustomersTokenDetails();
@@ -58,7 +59,7 @@ namespace TokenManagementSystem.Controllers
 
             if (id != customer.Id)
             {
-                return BadRequest("Customer Id's to update do not match");
+                return BadRequest("Customer Id to update do not match");
             }
 
             try
@@ -78,7 +79,6 @@ namespace TokenManagementSystem.Controllers
         {
             try
             {
-                // customerRepository.DeleteCustomer(id);
                 await tokenDbService.DeleteCustomerAsync(id);
             }
             catch (Exception e)

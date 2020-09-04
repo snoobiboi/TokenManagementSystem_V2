@@ -29,6 +29,10 @@ namespace TokenManagementSystem
         {
             services.AddControllers();
             services.AddSingleton<ITokenSystemDbService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+            services.AddSwaggerGen(c =>
+            {
+                c.ResolveConflictingActions(apiDesc => apiDesc.First());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +42,13 @@ namespace TokenManagementSystem
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Token Management System API - V1");
+            });
 
             app.UseHttpsRedirection();
 

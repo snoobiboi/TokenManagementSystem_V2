@@ -19,6 +19,7 @@ namespace TokenManagementSystem.Controllers
 
         public BankController(ITokenSystemDbService dbService) => tokenDbService = dbService;
 
+        [HttpGet]
         public IEnumerable<Token> Get()
         {
             return tokenDbService.GetTokenDetailsForBank();
